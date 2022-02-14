@@ -1,4 +1,5 @@
-import { Response } from 'express';
+import { TestUserMiddleware } from './../middleware/test-user.middleware';
+import { Request, Response } from 'express';
 import {
   BadRequestException,
   Body,
@@ -14,7 +15,9 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  Req,
   Res,
+  Scope,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -29,12 +32,28 @@ import { TestPipe } from '../pipe/test.pipe';
 import { TestBodyDto } from '../model/test-body-dto';
 import { TestFirstInterceptor } from '../interceptor/test-first.interceptor';
 import { TestFirstGuard } from '../guard/test-first.guard';
+import { TestUser } from '../decorator/test-user.decorator';
+import { TestRoleGuard } from '../guard/test-role.guard';
+import { TestRole } from '../decorator/test-role.decorator';
+import { ConfigService } from '@nestjs/config';
+import { ModuleRef } from '@nestjs/core';
 
-@Controller('test')
-//@UseGuards(TestFirstGuard)
-//@UseInterceptors(TestFirstInterceptor)
+//@Controller('test')
+@Controller({ path: 'test', scope: Scope.REQUEST })
+// @UseGuards(TestFirstGuard)
+// @UseInterceptors(TestFirstInterceptor)
 export class TestController {
-  constructor(private readonly testService: TestService) {}
+  constructor(
+    private readonly moduleRef: ModuleRef,
+    private readonly configService: ConfigService,
+    private readonly testService: TestService,
+  ) {
+    console.log('TestController');
+    // this.moduleRef.get(TestService);
+    // this.moduleRef.get(TestService, { strict: false });
+    // this.moduleRef.resolve(TestService);
+    // this.moduleRef.create(TestService);
+  }
   // Async
   @Get('Async01')
   async Async01(@Query('millisecond') millisecond = 0) {
@@ -63,21 +82,23 @@ export class TestController {
     //   },
     //   HttpStatus.BAD_REQUEST,
     // );
-    throw new BadRequestException('Error');
+    // throw new BadRequestException('Error');
     // throw new BadRequestException({ msg: 'Error' });
     return this.testService.getData();
   }
   // Get
   @Get('example02')
-  async example02(@Res() res: Response) {
-    res.send({
+  async example02(@Req() request: Request, @Res() response: Response) {
+    console.log(request);
+    console.log(response);
+    response.send({
       title: `example02`,
       description: `description`,
     });
   }
   @Get('example03')
-  async example03(@Res({ passthrough: true }) res: Response) {
-    // res.send({
+  async example03(@Res({ passthrough: true }) response: Response) {
+    // response.send({
     //   title: `example03`,
     //   description: `description01`,
     // });
@@ -248,6 +269,29 @@ export class TestController {
     return {
       title: `pipe07`,
       description: `description dto:[${JSON.stringify(ids)}]`,
+    };
+  }
+  @Get('decorator01')
+  async decorator01(@TestUser() user: any) {
+    return {
+      title: `decorator01`,
+      description: `description user:[${JSON.stringify(user)}]`,
+    };
+  }
+  @Get('decorator02')
+  async decorator02(@TestUser('name') name: string) {
+    return {
+      title: `decorator01`,
+      description: `description name:[${name}]`,
+    };
+  }
+  @Get('decorator03')
+  //@TestRole('admin')
+  @TestRole('staff')
+  async decorator03() {
+    return {
+      title: `decorator03`,
+      description: `description`,
     };
   }
 }

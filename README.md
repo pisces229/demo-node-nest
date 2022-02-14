@@ -73,3 +73,30 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 Nest is [MIT licensed](LICENSE).
 
 [NestJS 帶你飛](https://ithelp.ithome.com.tw/users/20119338/ironman/3880)
+
+Git 的 core.autocrlf 參數
+
+`git config --global core.autocrlf false`
+
+Environment Package
+
+`npm install cross-env --save-dev`
+
+Production Command
+
+`set NODE_ENV=production`
+
+`set NODE_PORT=9000`
+
+`node dist/main`
+
+IISNODE(Web.Config)
+
+```xml
+<configuration>
+  <appSettings>
+    <add key="NODE_ENV" value="production" />
+    <add key="NODE_PORT" value="9000" />
+  </appSettings>
+</configuration>
+```

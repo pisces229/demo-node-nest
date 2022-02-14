@@ -2,9 +2,10 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
 @Injectable()
-export class TestFirstMiddleware implements NestMiddleware {
+export class TestRoleMiddleware implements NestMiddleware {
   use(request: Request, response: Response, next: NextFunction) {
-    console.log('TestFirstMiddleware');
+    request['role'] = 'staff';
+    console.log('TestRoleMiddleware');
     next();
   }
 }

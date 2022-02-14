@@ -3,6 +3,7 @@ import {
   Module,
   NestModule,
   RequestMethod,
+  Scope,
 } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { TestExceptionFilter } from './filter/test-exception.filter';
@@ -13,11 +14,18 @@ import { TestSecondMiddleware } from './middleware/test-second.middleware';
 import { TestFirstInterceptor } from './interceptor/test-first.interceptor';
 import { TestFirstPipe } from './pipe/test-first.pipe';
 import { TestFirstGuard } from './guard/test-first.guard';
+import { TestUserMiddleware } from './middleware/test-user.middleware';
+import { TestRoleMiddleware } from './middleware/test-role.middleware';
 
 @Module({
   controllers: [TestController],
   providers: [
     TestService,
+    // {
+    //   provide: TestService,
+    //   useClass: TestService,
+    //   scope: Scope.REQUEST,
+    // },
     {
       provide: APP_GUARD,
       useClass: TestFirstGuard,
@@ -53,5 +61,7 @@ export class TestModule implements NestModule {
     // consumer
     //   .apply(TestFirstMiddleware, TestSecondMiddleware)
     //   .forRoutes(TestController);
+    consumer.apply(TestUserMiddleware).forRoutes(TestController);
+    consumer.apply(TestRoleMiddleware).forRoutes(TestController);
   }
 }
