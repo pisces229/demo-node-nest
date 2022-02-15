@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Inject,
   NotAcceptableException,
   Param,
   ParseArrayPipe,
@@ -18,6 +19,8 @@ import {
   Req,
   Res,
   Scope,
+  UploadedFile,
+  UploadedFiles,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -25,7 +28,7 @@ import {
   ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
-import { of } from 'rxjs';
+import { firstValueFrom, map, of } from 'rxjs';
 import { TestService } from '../service/test.service';
 import { TestExceptionFilter } from '../filter/test-exception.filter';
 import { TestPipe } from '../pipe/test.pipe';
@@ -36,23 +39,32 @@ import { TestUser } from '../decorator/test-user.decorator';
 import { TestRoleGuard } from '../guard/test-role.guard';
 import { TestRole } from '../decorator/test-role.decorator';
 import { ConfigService } from '@nestjs/config';
-import { ModuleRef } from '@nestjs/core';
+import { ContextIdFactory, ModuleRef, REQUEST } from '@nestjs/core';
+import {
+  AnyFilesInterceptor,
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
+import { HttpService } from '@nestjs/axios';
+import { Agent } from 'https';
 
-//@Controller('test')
-@Controller({ path: 'test', scope: Scope.REQUEST })
+@Controller('test')
+// @Controller({ path: 'test', scope: Scope.REQUEST })
 // @UseGuards(TestFirstGuard)
 // @UseInterceptors(TestFirstInterceptor)
 export class TestController {
   constructor(
+    // Scope.REQUEST
+    // @Inject(REQUEST) private readonly request: Request,
     private readonly moduleRef: ModuleRef,
     private readonly configService: ConfigService,
+    private readonly httpService: HttpService,
     private readonly testService: TestService,
   ) {
     console.log('TestController');
-    // this.moduleRef.get(TestService);
-    // this.moduleRef.get(TestService, { strict: false });
-    // this.moduleRef.resolve(TestService);
-    // this.moduleRef.create(TestService);
+    console.log(`ENVIRONMENT:${configService.get<string>('ENVIRONMENT')}`);
+    console.log(`PORT:${configService.get<string>('PORT')}`);
   }
   // Async
   @Get('Async01')
@@ -291,6 +303,93 @@ export class TestController {
   async decorator03() {
     return {
       title: `decorator03`,
+      description: `description`,
+    };
+  }
+  @Get('scope')
+  async scope() {
+    // Scope.REQUEST
+    // this.moduleRef.get(TestService);
+    // this.moduleRef.get(TestService, { strict: false });
+    // this.moduleRef.resolve(TestService);
+    // this.moduleRef.create(TestService);
+    // console.log(`ContextIdFactory.create():[${ContextIdFactory.create().id}]`);
+    // const identifier = ContextIdFactory.create();
+    // this.moduleRef.registerRequestByContextId(this.request, identifier);
+    // const identifier = ContextIdFactory.getByRequest(this.request);
+    // const [instance1, instance2] = await Promise.all([
+    //   this.moduleRef.resolve(TestService, identifier),
+    //   this.moduleRef.resolve(TestService, identifier),
+    // ]);
+    // console.log(this.testService === instance1);
+    // console.log(this.testService === instance2);
+    // console.log(instance1 === instance2);
+    return {
+      title: `scope`,
+      description: `description`,
+    };
+  }
+  @Post('file01')
+  @UseInterceptors(FileInterceptor('file'))
+  async file01(@UploadedFile() file: Express.Multer.File) {
+    return {
+      fieldname: file.fieldname,
+      originalname: file.originalname,
+    };
+  }
+  @Post('file02')
+  @UseInterceptors(FilesInterceptor('files'))
+  async file02(@UploadedFiles() files: Express.Multer.File[]) {
+    return files.map(({ fieldname, originalname }) => ({
+      fieldname,
+      originalname,
+    }));
+  }
+  @Post('file03')
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'first' }, { name: 'second' }]),
+  )
+  // @UseInterceptors(
+  //   FileFieldsInterceptor([
+  //     { name: 'first', maxCount: 1 },
+  //     { name: 'second', maxCount: 1 },
+  //   ]),
+  // )
+  async file03(@UploadedFiles() files: { [x: string]: Express.Multer.File[] }) {
+    const { first, second } = files;
+    const list = [...first, ...second];
+    return list.map(({ fieldname, originalname }) => ({
+      fieldname,
+      originalname,
+    }));
+  }
+  @Post('file04')
+  @UseInterceptors(AnyFilesInterceptor())
+  async file04(@UploadedFiles() files: Express.Multer.File[]) {
+    return files.map(({ fieldname, originalname }) => ({
+      fieldname,
+      originalname,
+    }));
+  }
+  @Get('http01')
+  async http01() {
+    const httpsAgent = new Agent({ rejectUnauthorized: false });
+    // this.httpService
+    //   .get('https://my-json-server.typicode.com/pisces229/typicode/posts', {
+    //     httpsAgent,
+    //   })
+    //   .subscribe((response) => console.log(response.data));
+    const response = await firstValueFrom(
+      this.httpService.get(
+        'https://my-json-server.typicode.com/pisces229/typicode/posts',
+        {
+          httpsAgent,
+        },
+      ),
+    );
+    console.log(response.data);
+    return {
+      title: `http01`,
       description: `description`,
     };
   }

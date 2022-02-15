@@ -82,6 +82,14 @@ Environment Package
 
 `npm install cross-env --save-dev`
 
+File Package
+
+`npm install @types/multer --save-dev`
+
+HTTP Package
+
+`npm install @nestjs/axios --save`
+
 Production Command
 
 `set NODE_ENV=production`

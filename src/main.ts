@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   console.log(`NODE_ENV:[${process.env.NODE_ENV}]`);
   const app = await NestFactory.create(AppModule);
+  // app.enableCors();
   // const app = await NestFactory.create(AppModule, { cors: true });
   // app.useGlobalFilters(new Filter());
   // app.use(Middleware);

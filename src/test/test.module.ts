@@ -16,8 +16,61 @@ import { TestFirstPipe } from './pipe/test-first.pipe';
 import { TestFirstGuard } from './guard/test-first.guard';
 import { TestUserMiddleware } from './middleware/test-user.middleware';
 import { TestRoleMiddleware } from './middleware/test-role.middleware';
+import { MulterModule } from '@nestjs/platform-express';
+import { Request } from 'express';
+import { diskStorage } from 'multer';
+import { HttpModule } from '@nestjs/axios';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Agent } from 'https';
 
 @Module({
+  imports: [
+    HttpModule,
+    // HttpModule.register({
+    //   timeout: 5000,
+    //   maxRedirects: 5,
+    //   httpsAgent: new Agent({ rejectUnauthorized: false }),
+    // }),
+    // HttpModule.registerAsync({
+    //   useFactory: () => ({
+    //     timeout: 5000,
+    //     maxRedirects: 5,
+    //     httpsAgent: new Agent({ rejectUnauthorized: false }),
+    //   }),
+    // }),
+    // HttpModule.registerAsync({
+    //   imports: [ConfigModule],
+    //   useFactory: async (configService: ConfigService) => ({
+    //     timeout: configService.get('HTTP_TIMEOUT'),
+    //     maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
+    //     httpsAgent: new Agent({ rejectUnauthorized: false }),
+    //   }),
+    //   inject: [ConfigService],
+    // }),
+    MulterModule.register({
+      //dest: './upload',
+      dest: 'd:/workSpace/demo-node-nest/upload',
+    }),
+    // MulterModule.register({
+    //   storage: diskStorage({
+    //     destination: (
+    //       request: Request,
+    //       file: Express.Multer.File,
+    //       callback: (error: Error | null, destination: string) => void,
+    //     ) => {
+    //       //callback(null, join(__dirname, '/upload/'));
+    //       callback(null, 'd:/workSpace/demo-node-nest/upload');
+    //     },
+    //     filename: (
+    //       request: Request,
+    //       file: Express.Multer.File,
+    //       callback: (error: Error | null, destination: string) => void,
+    //     ) => {
+    //       callback(null, `${new Date().getTime()}-${file.originalname}`);
+    //     },
+    //   }),
+    // }),
+  ],
   controllers: [TestController],
   providers: [
     TestService,
