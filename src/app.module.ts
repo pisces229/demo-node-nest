@@ -1,39 +1,48 @@
 import {
   BeforeApplicationShutdown,
+  MiddlewareConsumer,
   Module,
+  NestModule,
   OnApplicationBootstrap,
   OnApplicationShutdown,
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { MulterModule } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TestModule } from './test/test.module';
+import { DemoFirstMiddleware } from './middleware/demo-first.middleware';
+import { DemoModule } from './demo.module';
+import { DemoSwaggerController } from './demo/demo-swagger/demo-swagger.controller';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `environment/${process.env.NODE_ENV}.env`,
-      // envFilePath: ['development.local.env', 'development.env'],
-      // expandVariables: true,
-    }),
-    TestModule,
-  ],
-  controllers: [AppController],
+  imports: [DemoModule],
+  controllers: [AppController, DemoSwaggerController],
   providers: [AppService],
 })
 export class AppModule
   implements
+    NestModule,
     OnModuleInit,
     OnApplicationBootstrap,
     OnModuleDestroy,
     BeforeApplicationShutdown,
     OnApplicationShutdown
 {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(DemoFirstMiddleware).forRoutes('*');
+    // consumer.apply(DemoFirstMiddleware, DemoSecondMiddleware).forRoutes('/router');
+    // consumer.apply(DemoFirstMiddleware, DemoSecondMiddleware).forRoutes(Controller);
+    // consumer
+    //   .apply(DemoFirstMiddleware)
+    //   .forRoutes(
+    //     { path: '/router', method: RequestMethod.POST },
+    //     { path: '/', method: RequestMethod.GET },
+    //   );
+    // consumer
+    //   .apply(DemoFirstMiddleware)
+    //   .exclude({ path: '/router', method: RequestMethod.GET })
+    //   .forRoutes(TestController);
+  }
   onModuleInit() {
     console.log(`onModuleInit`);
   }

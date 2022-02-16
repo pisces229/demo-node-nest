@@ -90,6 +90,18 @@ HTTP Package
 
 `npm install @nestjs/axios --save`
 
+JWT Package
+
+`npm install @nestjs/jwt --save`
+
+`npm install passport-jwt --save`
+
+`npm install @types/passport-jwt --save-dev`
+
+Swagger Package
+
+`npm install @nestjs/swagger swagger-ui-express --save`
+
 Production Command
 
 `set NODE_ENV=production`
