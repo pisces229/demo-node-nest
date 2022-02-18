@@ -16,13 +16,17 @@ import { ContextIdFactory, ModuleRef, REQUEST } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { Agent } from 'https';
 import { firstValueFrom, of } from 'rxjs';
+import { AppService } from 'src/app.service';
 import { DemoParamDecorator } from 'src/decorator/demo-param.decorator';
 import { DemoRoleDecorator } from 'src/decorator/demo-role.decorator';
+import { DemoDynamicService } from 'src/demo-dynamic.service';
+import { DemoCasbinGuard } from 'src/guard/demo-casbin.guard';
 import { DemoFirstGuard } from 'src/guard/demo-first.guard';
 import { DemoFirstInterceptor } from 'src/interceptor/demo-first.interceptor';
 import { Demo01Service } from './demo01.service';
 
 @Controller({ path: 'demo01', scope: Scope.REQUEST })
+@UseGuards(DemoCasbinGuard)
 // @UseGuards(DemoFirstGuard)
 // @UseInterceptors(DemoFirstInterceptor)
 export class Demo01Controller {
@@ -30,6 +34,7 @@ export class Demo01Controller {
     @Inject(REQUEST) private readonly request: Request,
     private readonly moduleRef: ModuleRef,
     private readonly httpService: HttpService,
+    private readonly demoDynamicService: DemoDynamicService,
     private readonly demo01Service: Demo01Service,
   ) {
     console.log('Demo01Controller');
@@ -53,6 +58,7 @@ export class Demo01Controller {
     // );
     // throw new BadRequestException('Error');
     // throw new BadRequestException({ msg: 'Error' });
+    this.demoDynamicService.run();
     this.demo01Service.encrypt();
     this.demo01Service.jwt();
     return of({

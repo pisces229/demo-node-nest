@@ -1,0 +1,7 @@
+p, role:people1, /demo01/case01, *
+p, role:people2, /demo01/case02, *
+p, role:people3, /demo01/case03, *
+p, role:people3, /demo01/case03, GET
+
+g, role:people3, role:people1
+g, role:people3, role:people2

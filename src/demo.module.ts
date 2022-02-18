@@ -1,10 +1,15 @@
 import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import { Global, Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { MulterModule } from '@nestjs/platform-express';
+import { newEnforcer } from 'casbin';
+import { AppService } from './app.service';
 import DemoConfigFactory from './config/demo.config';
+import { DemoDynamicModule } from './demo-dynamic.module';
+import { DemoDynamicService } from './demo-dynamic.service';
+import { DemoCasbinService } from './demo-casbin.service';
 import { DemoSwaggerController } from './demo/demo-swagger/demo-swagger.controller';
 import { Demo01Controller } from './demo/demo01/demo01.controller';
 import { Demo01Service } from './demo/demo01/demo01.service';
@@ -86,6 +91,7 @@ import { DemoFirstPipe } from './pipe/demo-first.pipe';
         };
       },
     }),
+    DemoDynamicModule.register(),
   ],
   controllers: [
     Demo01Controller,
@@ -113,11 +119,19 @@ import { DemoFirstPipe } from './pipe/demo-first.pipe';
     {
       provide: APP_PIPE,
       useClass: DemoFirstPipe,
+      // provide: APP_PIPE,
+      // useClass: ValidationPipe,
     },
     {
       provide: APP_FILTER,
       useClass: DemoExceptionFilter,
     },
+    {
+      provide: 'DEMO_CASBIN_ENFORCER',
+      useFactory: async () =>
+        await newEnforcer('casbin/model.conf', 'casbin/policy.csv'),
+    },
+    DemoCasbinService,
   ],
 })
 export class DemoModule {}
