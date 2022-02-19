@@ -9,6 +9,8 @@ import {
 } from '@nestjs/swagger';
 
 async function bootstrap() {
+  console.log(`__dirname:${__dirname}`);
+  console.log(`__filename:${__filename}`);
   console.log(`NODE_ENV:[${process.env.NODE_ENV}]`);
   const app = await NestFactory.create(AppModule);
   // app.enableCors();

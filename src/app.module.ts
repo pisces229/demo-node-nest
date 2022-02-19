@@ -12,11 +12,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DemoFirstMiddleware } from './middleware/demo-first.middleware';
 import { DemoModule } from './demo.module';
-import { DemoSwaggerController } from './demo/demo-swagger/demo-swagger.controller';
 
 @Module({
   imports: [DemoModule],
-  controllers: [AppController, DemoSwaggerController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule

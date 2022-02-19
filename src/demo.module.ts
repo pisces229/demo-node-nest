@@ -21,6 +21,11 @@ import { DemoExceptionFilter } from './filter/demo-exception.filter';
 import { DemoFirstGuard } from './guard/demo-first.guard';
 import { DemoFirstInterceptor } from './interceptor/demo-first.interceptor';
 import { DemoFirstPipe } from './pipe/demo-first.pipe';
+import { Connection, createConnection } from 'typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DemoOrmController } from './demo/demo-orm/demo-orm.controller';
+import { DemoOrmService } from './demo/demo-orm/demo-orm.service';
+import { First } from './entities/first.entity';
 
 @Module({
   imports: [
@@ -91,6 +96,25 @@ import { DemoFirstPipe } from './pipe/demo-first.pipe';
         };
       },
     }),
+    TypeOrmModule.forRoot({
+      name: 'DemoConnection',
+      // mssql
+      // type: 'mssql',
+      // host: 'localhost',
+      // port: 1433,
+      // username: 'username',
+      // password: 'password',
+      // database: 'database',
+      // sqlite
+      type: 'sqlite',
+      database: 'd:/Database/SQLite/DemoNodeNest.db',
+      // entities
+      // entities: [__dirname + '/src/entities/*.entity{.ts,.js}'],
+      // entities: [First],
+      autoLoadEntities: true,
+      // synchronize: true,
+    }),
+    TypeOrmModule.forFeature([First], 'DemoConnection'),
     DemoDynamicModule.register(),
   ],
   controllers: [
@@ -98,8 +122,32 @@ import { DemoFirstPipe } from './pipe/demo-first.pipe';
     Demo02Controller,
     Demo03Controller,
     DemoSwaggerController,
+    DemoOrmController,
   ],
   providers: [
+    // {
+    //   provide: 'TypeORMInstance',
+    //   useFactory: async () =>
+    //     await createConnection({
+    //       // mssql
+    //       // type: 'mssql',
+    //       // host: 'localhost',
+    //       // port: 1433,
+    //       // username: 'username',
+    //       // password: 'password',
+    //       // database: 'database',
+    //       // sqlite
+    //       type: 'sqlite',
+    //       database: 'd:/Database/SQLite/DemoNodeNest.db',
+    //       // entities
+    //       entities: [__dirname + '/scr/entities/*.entity{.ts,.js}'],
+    //     }),
+    // },
+    // {
+    //   provide: 'FirstRepository',
+    //   useFactory: (connection: Connection) => connection.getRepository(First),
+    //   inject: ['TypeORMInstance'],
+    // },
     // {
     //   provide: Service,
     //   useClass: Service,
@@ -108,6 +156,7 @@ import { DemoFirstPipe } from './pipe/demo-first.pipe';
     Demo01Service,
     Demo02Service,
     Demo03Service,
+    DemoOrmService,
     {
       provide: APP_GUARD,
       useClass: DemoFirstGuard,

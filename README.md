@@ -102,6 +102,12 @@ Swagger Package
 
 `npm install @nestjs/swagger swagger-ui-express --save`
 
+Typeorm Package
+
+`npm install @nestjs/typeorm typeorm  --save`
+
+`npm install sqlite3 --save`
+
 Production Command
 
 `set NODE_ENV=production`
