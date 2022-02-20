@@ -26,6 +26,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DemoOrmController } from './demo/demo-orm/demo-orm.controller';
 import { DemoOrmService } from './demo/demo-orm/demo-orm.service';
 import { First } from './entities/first.entity';
+import DatabaseLogger from './logger/database.logger';
 
 @Module({
   imports: [
@@ -113,6 +114,7 @@ import { First } from './entities/first.entity';
       // entities: [First],
       autoLoadEntities: true,
       // synchronize: true,
+      logger: new DatabaseLogger(),
     }),
     TypeOrmModule.forFeature([First], 'DemoConnection'),
     DemoDynamicModule.register(),

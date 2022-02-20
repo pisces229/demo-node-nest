@@ -108,6 +108,10 @@ Typeorm Package
 
 `npm install sqlite3 --save`
 
+Log4js Package
+
+`npm install log4js --save`
+
 Production Command
 
 `set NODE_ENV=production`

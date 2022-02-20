@@ -12,11 +12,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DemoFirstMiddleware } from './middleware/demo-first.middleware';
 import { DemoModule } from './demo.module';
+import DemoLogger from './logger/demo.logger';
 
 @Module({
   imports: [DemoModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [DemoLogger, AppService],
 })
 export class AppModule
   implements

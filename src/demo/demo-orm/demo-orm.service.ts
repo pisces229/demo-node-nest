@@ -126,6 +126,6 @@ export class DemoOrmService {
     }
   }
   async query03() {
-    console.log(await this.connection.query('delete from FIRST'));
+    console.log(await this.connection.query(`delete from FIRST`));
   }
 }
