@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import * as Fs from 'fs';
 import { AppModule } from './app.module';
 import {
   DocumentBuilder,
@@ -19,6 +20,13 @@ async function bootstrap() {
   // });
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
+    // httpsOptions: {
+    //   // pfx: '',
+    //   key: Fs.readFileSync('d:/openssl/server/server.key'),
+    //   passphrase: '123456',
+    //   cert: Fs.readFileSync('d:/openssl/server/server.crt'),
+    //   // ca: '',
+    // },
   });
   app.useLogger(app.get(DemoLogger));
   // app.enableCors();
