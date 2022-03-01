@@ -9,7 +9,7 @@ import { Observable, tap } from 'rxjs';
 @Injectable()
 export class DemoFirstInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    console.log('DemoFirstInterceptor');
+    console.log('DemoFirstInterceptor [STARTED]');
     // const controller: TestController = context.getClass<TestController>();
     // const method: Function = context.getHandler();
     return next.handle();

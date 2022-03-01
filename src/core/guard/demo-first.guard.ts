@@ -6,7 +6,7 @@ export class DemoFirstGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('DemoFirstGuard');
+    console.log('DemoFirstGuard [STARTED]');
     return true;
     // return of(false).pipe(delay(2000));
   }
