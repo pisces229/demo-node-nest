@@ -2,13 +2,13 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import * as Fs from 'fs';
-import { AppModule } from './app.module';
+import { MainModule } from './main.module';
 import {
   DocumentBuilder,
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import DemoLogger from './logger/demo.logger';
+import DemoLogger from './core/logger/demo.logger';
 
 async function bootstrap() {
   console.log(`__dirname:${__dirname}`);
@@ -18,7 +18,7 @@ async function bootstrap() {
   //   // logger: ['error', 'warn', 'log', 'verbose', 'debug'],
   //   logger: ['error', 'warn'],
   // });
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create(MainModule, {
     bufferLogs: true,
     // httpsOptions: {
     //   // pfx: '',

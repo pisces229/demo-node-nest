@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   HttpStatus,
+  Logger,
   NotAcceptableException,
   ParseArrayPipe,
   Post,
@@ -19,17 +20,18 @@ import {
   FilesInterceptor,
 } from '@nestjs/platform-express';
 import { of } from 'rxjs';
-import { Demo03Case03Model, Demo03Case09Model } from './demo03.interface';
+import { Demo03Case03Model, Demo03Case09Model } from './demo03.model';
 import { Demo03Service } from './demo03.service';
 
 @Controller('demo03')
 export class Demo03Controller {
+  private readonly logger = new Logger(Demo03Controller.name);
   constructor(private readonly demo03Service: Demo03Service) {
-    console.log('Demo03Controller');
+    this.logger.log('Demo03Controller');
   }
   @Post('case01')
   async case01(@Body() model: { text: string; value?: string }) {
-    console.log(JSON.stringify(model));
+    this.logger.log(JSON.stringify(model));
     return of({ content: `case01` });
   }
   @Post('case02')
@@ -39,20 +41,20 @@ export class Demo03Controller {
   @Post('case03')
   // async case03(@Body() model: Demo03Case03Model) {
   async case03(@Body() model: Demo03Case03Model[]) {
-    console.log(JSON.stringify(model));
+    this.logger.log(JSON.stringify(model));
     return of({ content: `case03` });
   }
   @Post('case04')
   @UseInterceptors(FileInterceptor('file'))
   async case04(@UploadedFile() file: Express.Multer.File) {
-    console.log(file.fieldname);
-    console.log(file.originalname);
+    this.logger.log(file.fieldname);
+    this.logger.log(file.originalname);
     return of({ content: `case04` });
   }
   @Post('case05')
   @UseInterceptors(FilesInterceptor('files'))
   async case05(@UploadedFiles() files: Express.Multer.File[]) {
-    console.log(
+    this.logger.log(
       JSON.stringify(
         files.map(({ fieldname, originalname }) => ({
           fieldname,
@@ -75,7 +77,7 @@ export class Demo03Controller {
   async case06(@UploadedFiles() files: { [x: string]: Express.Multer.File[] }) {
     const { first, second } = files;
     const list = [...first, ...second];
-    console.log(
+    this.logger.log(
       JSON.stringify(
         list.map(({ fieldname, originalname }) => ({
           fieldname,
@@ -88,7 +90,7 @@ export class Demo03Controller {
   @Post('case07')
   @UseInterceptors(AnyFilesInterceptor())
   async case07(@UploadedFiles() files: Express.Multer.File[]) {
-    console.log(
+    this.logger.log(
       JSON.stringify(
         files.map(({ fieldname, originalname }) => ({
           fieldname,
@@ -105,7 +107,7 @@ export class Demo03Controller {
     @Body('text') text: string[],
     @Body('value') value: string[],
   ) {
-    console.log(
+    this.logger.log(
       JSON.stringify(
         files.map(({ fieldname, originalname }) => ({
           fieldname,
@@ -113,8 +115,8 @@ export class Demo03Controller {
         })),
       ),
     );
-    console.log(JSON.stringify(text));
-    console.log(JSON.stringify(value));
+    this.logger.log(JSON.stringify(text));
+    this.logger.log(JSON.stringify(value));
     return of({ content: `case08` });
   }
   // Pipe
@@ -136,10 +138,10 @@ export class Demo03Controller {
   // @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   // @UsePipes(new ValidationPipe({ transform: true }))
   async case09(@Body() model: Demo03Case09Model) {
-    console.log(model);
-    console.log(`typeof dto:${typeof model}`);
-    console.log(`typeof dto.title:${typeof model.text}`);
-    console.log(`typeof dto.description:${typeof model.value}`);
+    this.logger.log(model);
+    this.logger.log(`typeof dto:${typeof model}`);
+    this.logger.log(`typeof dto.title:${typeof model.text}`);
+    this.logger.log(`typeof dto.description:${typeof model.value}`);
     return of({ content: `case09 model:[${JSON.stringify(model)}]` });
   }
   @Post('case10')

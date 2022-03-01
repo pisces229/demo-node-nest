@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Inject,
+  Logger,
   Req,
   Res,
   Scope,
@@ -16,13 +17,11 @@ import { ContextIdFactory, ModuleRef, REQUEST } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { Agent } from 'https';
 import { firstValueFrom, of } from 'rxjs';
-import { AppService } from 'src/app.service';
-import { DemoParamDecorator } from 'src/decorator/demo-param.decorator';
-import { DemoRoleDecorator } from 'src/decorator/demo-role.decorator';
-import { DemoDynamicService } from 'src/demo-dynamic.service';
-import { DemoCasbinGuard } from 'src/guard/demo-casbin.guard';
-import { DemoFirstGuard } from 'src/guard/demo-first.guard';
-import { DemoFirstInterceptor } from 'src/interceptor/demo-first.interceptor';
+import { DemoParamDecorator } from 'src/core/decorator/demo-param.decorator';
+import { DemoRoleDecorator } from 'src/core/decorator/demo-role.decorator';
+import { DemoCasbinGuard } from 'src/core/guard/demo-casbin.guard';
+import { DemoFirstGuard } from 'src/core/guard/demo-first.guard';
+import { DemoFirstInterceptor } from 'src/core/interceptor/demo-first.interceptor';
 import { Demo01Service } from './demo01.service';
 
 @Controller({ path: 'demo01', scope: Scope.REQUEST })
@@ -30,14 +29,14 @@ import { Demo01Service } from './demo01.service';
 // @UseGuards(DemoFirstGuard)
 // @UseInterceptors(DemoFirstInterceptor)
 export class Demo01Controller {
+  private readonly logger = new Logger(Demo01Controller.name);
   constructor(
     @Inject(REQUEST) private readonly request: Request,
     private readonly moduleRef: ModuleRef,
     private readonly httpService: HttpService,
-    private readonly demoDynamicService: DemoDynamicService,
     private readonly demo01Service: Demo01Service,
   ) {
-    console.log('Demo01Controller');
+    this.logger.log('Demo01Controller');
   }
   @Get('case01')
   // @Get('case*1')
@@ -58,7 +57,6 @@ export class Demo01Controller {
     // );
     // throw new BadRequestException('Error');
     // throw new BadRequestException({ msg: 'Error' });
-    this.demoDynamicService.run();
     this.demo01Service.encrypt();
     this.demo01Service.jwt();
     return of({
@@ -68,8 +66,8 @@ export class Demo01Controller {
   }
   @Get('case02')
   async case02(@Req() request: Request, @Res() response: Response) {
-    console.log(request);
-    console.log(response);
+    this.logger.log(request);
+    this.logger.log(response);
     response.send({ content: `case02` });
   }
   @Get('case03')
@@ -93,7 +91,7 @@ export class Demo01Controller {
     // this.moduleRef.get(Demo01Service, { strict: false });
     // this.moduleRef.resolve(Demo01Service);
     // this.moduleRef.create(Demo01Service);
-    // console.log(`ContextIdFactory.create():[${ContextIdFactory.create().id}]`);
+    // this.logger.log(`ContextIdFactory.create():[${ContextIdFactory.create().id}]`);
     // const identifier = ContextIdFactory.create();
     // this.moduleRef.registerRequestByContextId(this.request, identifier);
     const identifier = ContextIdFactory.getByRequest(this.request);
@@ -101,9 +99,9 @@ export class Demo01Controller {
       this.moduleRef.resolve(Demo01Service, identifier),
       this.moduleRef.resolve(Demo01Service, identifier),
     ]);
-    console.log(this.demo01Service === instance1);
-    console.log(this.demo01Service === instance2);
-    console.log(instance1 === instance2);
+    this.logger.log(this.demo01Service === instance1);
+    this.logger.log(this.demo01Service === instance2);
+    this.logger.log(instance1 === instance2);
     return of({ content: `case06` });
   }
   @Get('case07')
@@ -117,7 +115,7 @@ export class Demo01Controller {
         },
       ),
     );
-    console.log(JSON.stringify(response.data));
+    this.logger.log(JSON.stringify(response.data));
     return of({ content: `case07 [${JSON.stringify(response.data)}]` });
   }
 }

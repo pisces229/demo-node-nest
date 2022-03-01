@@ -4,7 +4,6 @@ import { Logger as NestLogger } from '@nestjs/common';
 class DatabaseLogger implements TypeOrmLogger {
   private readonly logger = new NestLogger('DatabaseLogger');
   constructor() {
-    console.log('DatabaseLogger');
     this.logger.log('DatabaseLogger');
   }
   logQuery(query: string, parameters?: unknown[]) {

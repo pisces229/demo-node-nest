@@ -1,13 +1,13 @@
-import { Controller, Get, Logger as NestLogger } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { of } from 'rxjs';
 import { DemoOrmService } from './demo-orm.service';
 
 @Controller('demo-orm')
 export class DemoOrmController {
-  private readonly logger = new NestLogger(DemoOrmController.name);
+  private readonly logger = new Logger(DemoOrmController.name);
   constructor(private readonly demoOrmService: DemoOrmService) {
     this.logger.debug('DemoOrmController');
-    console.log('DemoOrmController');
+    this.logger.log('DemoOrmController');
   }
   @Get('create')
   async create() {

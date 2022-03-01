@@ -42,10 +42,22 @@ class DemoLogger extends ConsoleLogger {
           pattern: 'yyyy-MM-dd-hh',
           compress: true,
         },
+        multiFile: {
+          type: 'multiFile',
+          layout: {
+            type: 'pattern',
+            pattern: '%d %p %c %m',
+          },
+          base: 'd:/workSpace/demo-node-nest/',
+          property: 'context',
+          pattern: 'yyyy-MM-dd-hh',
+          extension: '.log',
+          compress: true,
+        },
       },
       categories: {
-        default: { appenders: ['console'], level: 'debug' },
-        // default: { appenders: ['dateFile'], level: 'debug' },
+        // default: { appenders: ['console'], level: 'debug' },
+        default: { appenders: ['dateFile'], level: 'all' },
       },
     });
     this.logger = getLogger();

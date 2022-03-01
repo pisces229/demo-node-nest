@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Logger,
   Param,
   ParseArrayPipe,
   ParseIntPipe,
@@ -12,8 +13,9 @@ import { Demo02Service } from './demo02.service';
 
 @Controller('demo02')
 export class Demo02Controller {
+  private readonly logger = new Logger(Demo02Controller.name);
   constructor(private readonly demo02Service: Demo02Service) {
-    console.log('Demo02Controller');
+    this.logger.log('Demo02Controller');
   }
   @Get('case01')
   async case01() {

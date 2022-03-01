@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Logger, Post } from '@nestjs/common';
 import { of } from 'rxjs';
 import {
   ApiTags,
@@ -15,6 +15,7 @@ import {
 @ApiTags('Demo Swagger')
 @Controller('demo-swagger')
 export class DemoSwaggerController {
+  private readonly logger = new Logger(DemoSwaggerController.name);
   @Post('case01')
   async case01(@Body() model: DemoSwagger01InputModel) {
     return of({});
