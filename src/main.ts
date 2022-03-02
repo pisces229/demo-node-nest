@@ -8,7 +8,7 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import DemoLogger from './core/logger/demo.logger';
+import DefaultLogger from './core/logger/default.logger';
 
 async function bootstrap() {
   console.log(`__dirname:${__dirname}`);
@@ -28,7 +28,7 @@ async function bootstrap() {
     //   // ca: '',
     // },
   });
-  app.useLogger(app.get(DemoLogger));
+  app.useLogger(app.get(DefaultLogger));
   // app.enableCors();
   // const app = await NestFactory.create(AppModule, { cors: true });
   // app.setGlobalPrefix('api');

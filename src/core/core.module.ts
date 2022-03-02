@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MulterModule } from '@nestjs/platform-express';
 import { newEnforcer } from 'casbin';
-import { DemoCasbinService } from './demo-casbin.service';
+import { DefaultCasbinService } from './service/default-casbin.service';
 
 @Global()
 @Module({
@@ -72,12 +72,12 @@ import { DemoCasbinService } from './demo-casbin.service';
   ],
   providers: [
     {
-      provide: 'DEMO_CASBIN_ENFORCER',
+      provide: 'DEFAULT_CASBIN_ENFORCER',
       useFactory: async () =>
         await newEnforcer('casbin/model.conf', 'casbin/policy.csv'),
     },
-    DemoCasbinService,
+    DefaultCasbinService,
   ],
-  exports: [JwtModule, HttpModule, MulterModule, DemoCasbinService],
+  exports: [JwtModule, HttpModule, MulterModule, DefaultCasbinService],
 })
 export class CoreModule {}

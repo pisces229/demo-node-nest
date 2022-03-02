@@ -6,7 +6,7 @@ import { DatabaseName } from './database.name';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      name: DatabaseName.DemoConnection,
+      name: DatabaseName.DefaultConnection,
       // mssql
       // type: 'mssql',
       // host: 'localhost',
@@ -17,8 +17,9 @@ import { DatabaseName } from './database.name';
       // sqlite
       type: 'sqlite',
       database: 'd:/Database/SQLite/DemoNodeNest.db',
+      // database: ':memory:',
       // entities
-      // entities: [__dirname + '/src/entities/*.entity{.ts,.js}'],
+      // entities: [__dirname + '/src/common/database/entity/*.entity{.ts,.js}'],
       // entities: [First],
       autoLoadEntities: true,
       // synchronize: true,

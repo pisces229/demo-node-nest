@@ -1,3 +1,3 @@
 export enum DatabaseName {
-  DemoConnection = 'DemoConnection',
+  DefaultConnection = 'DefaultConnection',
 }
