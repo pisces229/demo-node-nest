@@ -49,20 +49,31 @@ class DefaultLogger extends ConsoleLogger {
             pattern: '%d %p %c %m',
           },
           base: 'd:/workSpace/demo-node-nest/',
-          property: 'context',
+          property: 'system',
           pattern: 'yyyy-MM-dd-hh',
           extension: '.log',
+          compress: true,
+        },
+        system: {
+          type: 'dateFile',
+          layout: {
+            type: 'pattern',
+            pattern: '%d %p %c %m',
+          },
+          filename: 'd:/workSpace/demo-node-nest/system.log',
+          maxLogSize: 10240,
+          pattern: 'yyyy-MM-dd-hh',
           compress: true,
         },
       },
       categories: {
         // level: 'debug'
         default: { appenders: ['console'], level: 'all' },
-        // default: { appenders: ['dateFile'], level: 'all' },
+        // default: { appenders: ['multiFile'], level: 'all' },
+        system: { appenders: ['system'], level: 'all' },
       },
     });
-    this.logger = getLogger();
-    this.logger.addContext('user', 'demo');
+    this.logger = getLogger('system');
   }
   log(message: string, context?: string) {
     this.createLog({

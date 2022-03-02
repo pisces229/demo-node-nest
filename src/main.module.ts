@@ -8,6 +8,7 @@ import {
   OnApplicationShutdown,
   OnModuleDestroy,
   OnModuleInit,
+  Scope,
   ValidationPipe,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
