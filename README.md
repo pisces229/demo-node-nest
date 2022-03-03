@@ -112,6 +112,10 @@ Log4js Package
 
 `npm install log4js --save`
 
+Winston Package
+
+`npm install winston --save`
+
 Production Command
 
 `set NODE_ENV=production`

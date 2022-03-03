@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import DatabaseLogger from 'src/core/logger/database.logger';
 import { DatabaseName } from './database.name';
 
 @Module({
@@ -23,7 +22,7 @@ import { DatabaseName } from './database.name';
       // entities: [First],
       autoLoadEntities: true,
       // synchronize: true,
-      logger: new DatabaseLogger(),
+      // logger: new DatabaseLogger(),
     }),
   ],
 })

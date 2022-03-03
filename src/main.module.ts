@@ -20,7 +20,7 @@ import { DefaultGuard } from './core/guard/default.guard';
 import { DefaultInterceptor } from './core/interceptor/default.interceptor';
 import { DefaultPipe } from './core/pipe/default.pipe';
 import DefaultConfigFactory from './config/default.config';
-import DefaultLogger from './core/logger/default.logger';
+import DefaultLogger from './core/logger/log4js-system.logger';
 import { DatabaseModule } from './common/database/database.module';
 import { CoreModule } from './core/core.module';
 import { DefaultTestModule } from './app/default-test/default-test.module';

@@ -8,7 +8,7 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import DefaultLogger from './core/logger/default.logger';
+import DefaultLogger from './core/logger/log4js-system.logger';
 
 async function bootstrap() {
   console.log(`__dirname:${__dirname}`);
