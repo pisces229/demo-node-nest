@@ -1,13 +1,20 @@
 import { Logger as TypeOrmLogger } from 'typeorm';
-import { Logger as NestLogger } from '@nestjs/common';
+import { createLogger, format, Logger, transports } from 'winston';
 
-class WinstonDatabaseLogger implements TypeOrmLogger {
-  private readonly logger = new NestLogger('DatabaseLogger');
+export class WinstonDatabaseLogger implements TypeOrmLogger {
+  private readonly logger: Logger;
   constructor() {
-    this.logger.log('DatabaseLogger');
+    this.logger = createLogger({
+      format: format.json(),
+      transports: [
+        new transports.File({
+          filename: `d:/workspace/demo-node-nest/winston-database.log`,
+        }),
+      ],
+    });
   }
   logQuery(query: string, parameters?: unknown[]) {
-    this.logger.log(
+    this.logger.info(
       `${query} -- Parameters: ${this.stringifyParameters(parameters)}`,
     );
   }
@@ -26,15 +33,15 @@ class WinstonDatabaseLogger implements TypeOrmLogger {
     );
   }
   logMigration(message: string) {
-    this.logger.log(message);
+    this.logger.info(message);
   }
   logSchemaBuild(message: string) {
-    this.logger.log(message);
+    this.logger.info(message);
   }
   log(level: 'log' | 'info' | 'warn', message: string) {
     switch (level) {
       case 'log': {
-        return this.logger.log(message);
+        return this.logger.info(message);
       }
       case 'info': {
         return this.logger.debug(message);
@@ -52,4 +59,3 @@ class WinstonDatabaseLogger implements TypeOrmLogger {
     }
   }
 }
-export default WinstonDatabaseLogger;

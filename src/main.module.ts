@@ -20,7 +20,6 @@ import { DefaultGuard } from './core/guard/default.guard';
 import { DefaultInterceptor } from './core/interceptor/default.interceptor';
 import { DefaultPipe } from './core/pipe/default.pipe';
 import DefaultConfigFactory from './config/default.config';
-import DefaultLogger from './core/logger/log4js-system.logger';
 import { DatabaseModule } from './common/database/database.module';
 import { CoreModule } from './core/core.module';
 import { DefaultTestModule } from './app/default-test/default-test.module';
@@ -28,6 +27,7 @@ import { DefaultGetModule } from './app/default-get/default-get.module';
 import { DefaultPostModule } from './app/default-post/default-post.module';
 import { DefaultSwaggerModule } from './app/default-swagger/default-swagger.module';
 import { DefaultOrmModule } from './app/default-orm/default-orm.module';
+import { WinstonSystemLogger } from './core/logger/winston-system.logger';
 
 @Module({
   imports: [
@@ -49,7 +49,7 @@ import { DefaultOrmModule } from './app/default-orm/default-orm.module';
   ],
   controllers: [],
   providers: [
-    DefaultLogger,
+    WinstonSystemLogger,
     // {
     //   provide: Service,
     //   useClass: Service,

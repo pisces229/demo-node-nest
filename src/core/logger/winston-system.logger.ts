@@ -2,7 +2,7 @@ import { Injectable, ConsoleLogger } from '@nestjs/common';
 import { createLogger, format, Logger, transports } from 'winston';
 
 @Injectable()
-class WinstonSystemLogger extends ConsoleLogger {
+export class WinstonSystemLogger extends ConsoleLogger {
   private readonly logger: Logger;
   constructor() {
     // super('', { logLevels: ['error', 'warn', 'log', 'verbose', 'debug'] });
@@ -22,7 +22,9 @@ class WinstonSystemLogger extends ConsoleLogger {
       // defaultMeta: { service: 'default' },
       transports: [
         // new transports.File({ filename: 'quick-start-error.log', level: 'error' }),
-        // new transports.File({ filename: 'd:/workspace/demo-node/quick-start-combined.log' }),
+        new transports.File({
+          filename: 'd:/workspace/demo-node-nest/system.log',
+        }),
         // new transports.Console({ level: 'debug' }),
         new transports.Console(),
       ],
@@ -40,4 +42,3 @@ class WinstonSystemLogger extends ConsoleLogger {
   verbose = (message: string, context?: string) =>
     this.logger.verbose(message, { context });
 }
-export default WinstonSystemLogger;

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Scope } from '@nestjs/common';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { DatabaseName } from 'src/common/database/database.name';
 import { First } from 'src/common/database/entity/first.entity';

@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module, Scope } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { WinstonDatabaseLogger } from 'src/core/logger/winston-database.logger';
 import { DatabaseName } from './database.name';
 
 @Module({
@@ -22,7 +23,7 @@ import { DatabaseName } from './database.name';
       // entities: [First],
       autoLoadEntities: true,
       // synchronize: true,
-      // logger: new DatabaseLogger(),
+      logger: new WinstonDatabaseLogger(),
     }),
   ],
 })
