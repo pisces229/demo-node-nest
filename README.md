@@ -116,6 +116,10 @@ Winston Package
 
 `npm install winston --save`
 
+Jest-Cli Package
+
+`npm install -g jest-cli`
+
 Production Command
 
 `set NODE_ENV=production`
