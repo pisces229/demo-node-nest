@@ -22,6 +22,7 @@ import { DefaultPipe } from './core/pipe/default.pipe';
 import DefaultConfigFactory from './config/default.config';
 import { DatabaseModule } from './common/database/database.module';
 import { CoreModule } from './core/core.module';
+import { DefaultAppModule } from './app/default-app/default-app.module';
 import { DefaultTestModule } from './app/default-test/default-test.module';
 import { DefaultGetModule } from './app/default-get/default-get.module';
 import { DefaultPostModule } from './app/default-post/default-post.module';
@@ -41,6 +42,7 @@ import { WinstonSystemLogger } from './core/logger/winston-system.logger';
     }),
     DefaultDynamicModule.register(),
     DatabaseModule,
+    DefaultAppModule,
     DefaultTestModule,
     DefaultGetModule,
     DefaultPostModule,
