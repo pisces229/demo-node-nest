@@ -14,6 +14,9 @@ async function bootstrap() {
   console.log(`__dirname:${__dirname}`);
   console.log(`__filename:${__filename}`);
   console.log(`NODE_ENV:[${process.env.NODE_ENV}]`);
+  console.log(
+    `DATABASE_DEFAULT_DATABASE:${process.env.DATABASE_DEFAULT_DATABASE}`,
+  );
   // const app = await NestFactory.create(AppModule, {
   //   // logger: ['error', 'warn', 'log', 'verbose', 'debug'],
   //   logger: ['error', 'warn'],
