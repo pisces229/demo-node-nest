@@ -16,7 +16,7 @@ import { DatabaseName } from './database.name';
       // database: 'database',
       // sqlite
       type: 'sqlite',
-      database: 'd:/Database/SQLite/DemoNodeNest.db',
+      database: process.env.DATABASE_DEFAULT_DATABASE,
       // database: ':memory:',
       // entities
       // entities: [__dirname + '/src/common/database/entity/*.entity{.ts,.js}'],

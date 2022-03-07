@@ -38,17 +38,16 @@ async function bootstrap() {
   // app.useGlobalGuards(new Guard());
   const configService = app.get(ConfigService);
   console.log(`ENVIRONMENT:
-    [${configService.get<string>('ENVIRONMENT')}]
-    [${process.env.ENVIRONMENT}]`);
+    [${configService.get<string>('server.environment')}]
+    [${process.env.SERVER_ENVIRONMENT}]`);
   console.log(`PORT:
-    [${configService.get<string>('PORT')}]
-    [${process.env.PORT}]`);
-  console.log(`Get:[${configService.get<string>('demo.value')}]`);
+    [${configService.get<string>('server.port')}]
+    [${process.env.SERVER_PORT}]`);
   setupSwagger(app);
-  await app.listen(configService.get<number>('PORT'));
+  await app.listen(process.env.SERVER_PORT);
   // app.enableShutdownHooks();
   // await app.close();
-  console.log(`http://localhost:${configService.get<number>('PORT')}`);
+  console.log(`http://localhost:${process.env.SERVER_PORT}`);
 }
 function setupSwagger(app: INestApplication) {
   const builder = new DocumentBuilder();

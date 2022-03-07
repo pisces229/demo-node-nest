@@ -8,19 +8,8 @@ import { of } from 'rxjs';
 @Injectable({ scope: Scope.REQUEST })
 export class DefaultTestService {
   private readonly logger = new Logger(DefaultTestService.name);
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly jwtService: JwtService,
-  ) {
+  constructor(private readonly jwtService: JwtService) {
     this.logger.log('DefaultTestService');
-    this.logger.log(
-      `DefaultTestService this.configService.get<string>('PORT'):
-      ${this.configService.get<number>('PORT')}`,
-    );
-    this.logger.log(
-      `DefaultTestService this.configService.get<string>('ENVIRONMENT'):
-      ${this.configService.get<string>('ENVIRONMENT')}`,
-    );
   }
   get = () => of({ service: 'DefaultTestService', method: 'get' });
   public encrypt(): void {
