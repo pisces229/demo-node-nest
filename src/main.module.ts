@@ -28,7 +28,7 @@ import { DefaultGetModule } from './app/default-get/default-get.module';
 import { DefaultPostModule } from './app/default-post/default-post.module';
 import { DefaultSwaggerModule } from './app/default-swagger/default-swagger.module';
 import { DefaultOrmModule } from './app/default-orm/default-orm.module';
-import { WinstonSystemLogger } from './core/logger/winston-system.logger';
+import { SystemLogger } from './core/logger/system.logger';
 
 @Module({
   imports: [
@@ -51,7 +51,7 @@ import { WinstonSystemLogger } from './core/logger/winston-system.logger';
   ],
   controllers: [],
   providers: [
-    WinstonSystemLogger,
+    SystemLogger,
     // {
     //   provide: Service,
     //   useClass: Service,

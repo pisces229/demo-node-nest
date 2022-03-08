@@ -2,12 +2,12 @@ import { Injectable, ConsoleLogger } from '@nestjs/common';
 import { createLogger, format, Logger, transports } from 'winston';
 
 @Injectable()
-export class WinstonSystemLogger extends ConsoleLogger {
+export class SystemLogger extends ConsoleLogger {
   private readonly logger: Logger;
   constructor() {
     // super('', { logLevels: ['error', 'warn', 'log', 'verbose', 'debug'] });
     super('', { logLevels: [] });
-    console.log('WinstonSystemLogger');
+    console.log('SystemLogger');
     this.logger = createLogger({
       level: 'info',
       format: format.json(),
@@ -24,6 +24,8 @@ export class WinstonSystemLogger extends ConsoleLogger {
         // new transports.File({ filename: 'quick-start-error.log', level: 'error' }),
         new transports.File({
           filename: 'd:/workspace/demo-node-nest/system.log',
+          maxsize: 102400,
+          maxFiles: 10,
         }),
         // new transports.Console({ level: 'debug' }),
         new transports.Console(),

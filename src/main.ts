@@ -8,7 +8,7 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import { WinstonSystemLogger } from './core/logger/winston-system.logger';
+import { SystemLogger } from './core/logger/system.logger';
 
 async function bootstrap() {
   console.log(`__dirname:${__dirname}`);
@@ -31,7 +31,7 @@ async function bootstrap() {
     //   // ca: '',
     // },
   });
-  app.useLogger(app.get(WinstonSystemLogger));
+  app.useLogger(app.get(SystemLogger));
   // app.enableCors();
   // const app = await NestFactory.create(AppModule, { cors: true });
   // app.setGlobalPrefix('api');

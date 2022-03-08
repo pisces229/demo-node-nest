@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { WinstonDefaultLogger } from 'src/core/logger/winston-default.logger';
+import { DefaultLogger } from 'src/core/logger/default.logger';
 import { DefaultAppRepository } from './default-app.repository';
 import { DefaultAppService } from './default-app.service';
 import { Scope } from '@nestjs/common';
@@ -13,7 +13,7 @@ describe('DefaultAppAllTest', () => {
       providers: [
         {
           scope: Scope.DEFAULT,
-          provide: WinstonDefaultLogger,
+          provide: DefaultLogger,
           useValue: {
             debug: (message: string) => console.log(message),
             info: (message: string) => console.log(message),

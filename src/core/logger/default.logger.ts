@@ -4,10 +4,10 @@ import { Request } from 'express';
 import { createLogger, format, Logger, transports } from 'winston';
 
 @Injectable({ scope: Scope.REQUEST })
-export class WinstonDefaultLogger {
+export class DefaultLogger {
   private readonly logger: Logger;
   constructor(@Inject(REQUEST) private readonly request: Request) {
-    console.log('WinstonDefaultLogger');
+    console.log('DefaultLogger');
     console.log(request.path);
     const filename = request.path
       .replace('/', '')
@@ -17,6 +17,8 @@ export class WinstonDefaultLogger {
       transports: [
         new transports.File({
           filename: `d:/workspace/demo-node-nest/${filename}.log`,
+          maxsize: 102400,
+          maxFiles: 10,
         }),
       ],
     });

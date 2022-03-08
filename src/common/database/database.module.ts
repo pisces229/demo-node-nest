@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { WinstonDatabaseLogger } from 'src/core/logger/winston-database.logger';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DatabaseLogger } from 'src/core/logger/database.logger';
 import { DatabaseName } from './database.name';
 
 @Module({
@@ -33,7 +33,7 @@ import { DatabaseName } from './database.name';
         type: 'sqlite',
         database: configService.get<string>('DATABASE_DEFAULT_DATABASE'),
         autoLoadEntities: true,
-        logger: new WinstonDatabaseLogger(),
+        logger: new DatabaseLogger(),
       }),
     }),
   ],

@@ -1,14 +1,16 @@
 import { Logger as TypeOrmLogger } from 'typeorm';
 import { createLogger, format, Logger, transports } from 'winston';
 
-export class WinstonDatabaseLogger implements TypeOrmLogger {
+export class DatabaseLogger implements TypeOrmLogger {
   private readonly logger: Logger;
   constructor() {
     this.logger = createLogger({
       format: format.json(),
       transports: [
         new transports.File({
-          filename: `d:/workspace/demo-node-nest/winston-database.log`,
+          filename: `d:/workspace/demo-node-nest/database.log`,
+          maxsize: 102400,
+          maxFiles: 10,
         }),
       ],
     });

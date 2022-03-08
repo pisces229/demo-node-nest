@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MulterModule } from '@nestjs/platform-express';
 import { newEnforcer } from 'casbin';
-import { WinstonDefaultLogger } from './logger/winston-default.logger';
+import { DefaultLogger } from './logger/default.logger';
 import { DefaultCasbinService } from './service/default-casbin.service';
 
 @Global()
@@ -78,14 +78,14 @@ import { DefaultCasbinService } from './service/default-casbin.service';
         await newEnforcer('casbin/model.conf', 'casbin/policy.csv'),
     },
     DefaultCasbinService,
-    WinstonDefaultLogger,
+    DefaultLogger,
   ],
   exports: [
     JwtModule,
     HttpModule,
     MulterModule,
     DefaultCasbinService,
-    WinstonDefaultLogger,
+    DefaultLogger,
   ],
 })
 export class CoreModule {}

@@ -108,13 +108,11 @@ Typeorm Package
 
 `npm install sqlite3 --save`
 
-Log4js Package
-
-`npm install log4js --save`
-
 Winston Package
 
 `npm install winston --save`
+
+`npm install winston-daily-rotate-file --save`
 
 Jest-Cli Package
 

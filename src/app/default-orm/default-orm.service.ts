@@ -1,7 +1,7 @@
 import { Injectable, Logger, Scope } from '@nestjs/common';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { DatabaseName } from 'src/common/database/database.name';
-import { First } from 'src/common/database/entity/first.entity';
+import { FirstEntity } from 'src/common/database/entity/first.entity';
 import { Connection, Repository } from 'typeorm';
 
 @Injectable()
@@ -10,46 +10,46 @@ export class DefaultOrmService {
   constructor(
     @InjectConnection(DatabaseName.DefaultConnection)
     private readonly connection: Connection,
-    @InjectRepository(First, DatabaseName.DefaultConnection)
-    private firstRepository: Repository<First>,
+    @InjectRepository(FirstEntity, DatabaseName.DefaultConnection)
+    private firstEntityRepository: Repository<FirstEntity>,
   ) {
     this.logger.log('DefaultOrmService');
     this.logger.log(connection.name);
   }
   async create() {
-    const data = await this.firstRepository.create({
+    const data = await this.firstEntityRepository.create({
       TEXT: 'create',
     });
-    this.logger.log(await this.firstRepository.save(data));
+    this.logger.log(await this.firstEntityRepository.save(data));
   }
   async insert() {
-    const data = <First>{ TEXT: 'insert' };
-    this.logger.log(await this.firstRepository.insert(data));
+    const data = <FirstEntity>{ TEXT: 'insert' };
+    this.logger.log(await this.firstEntityRepository.insert(data));
   }
   async save() {
-    const data = <First>{ ROW: 1, TEXT: 'save' };
-    this.logger.log(await this.firstRepository.save(data));
+    const data = <FirstEntity>{ ROW: 1, TEXT: 'save' };
+    this.logger.log(await this.firstEntityRepository.save(data));
   }
   async update() {
-    const data = (await this.firstRepository.find()).pop();
+    const data = (await this.firstEntityRepository.find()).pop();
     data.TEXT = 'update';
-    this.logger.log(await this.firstRepository.update(data.ROW, data));
+    this.logger.log(await this.firstEntityRepository.update(data.ROW, data));
   }
   async remove() {
-    const data = (await this.firstRepository.find()).pop();
-    this.logger.log(await this.firstRepository.remove(data));
+    const data = (await this.firstEntityRepository.find()).pop();
+    this.logger.log(await this.firstEntityRepository.remove(data));
   }
   async delete() {
-    this.logger.log(await this.firstRepository.delete({ ROW: 999 }));
+    this.logger.log(await this.firstEntityRepository.delete({ ROW: 999 }));
   }
   async find() {
-    this.logger.log(await this.firstRepository.find());
-    this.logger.log(await this.firstRepository.find({ TEXT: 'insert' }));
+    this.logger.log(await this.firstEntityRepository.find());
+    this.logger.log(await this.firstEntityRepository.find({ TEXT: 'insert' }));
   }
   async query01() {
     // this.connection.query
     this.logger.log(
-      <First[]>(
+      <FirstEntity[]>(
         await this.connection.query(
           `SELECT ? AS P0, ? AS P1, ? AS P2, ? AS P3`,
           ['A', 'B', 'C', 'D'],
@@ -57,7 +57,7 @@ export class DefaultOrmService {
       ),
     );
     this.logger.log(
-      <First[]>(
+      <FirstEntity[]>(
         await this.connection.query(
           `SELECT :p0 AS P0, :p1 AS P1, :p0 AS P2, :p1 AS P4`,
           ['1%', '%3'],
@@ -65,7 +65,7 @@ export class DefaultOrmService {
       ),
     );
     this.logger.log(
-      <First[]>(
+      <FirstEntity[]>(
         await this.connection.query(
           `SELECT $0 AS P0, $1 AS P1, $0 AS P2, $1 AS P4`,
           ['1%', '%3'],
@@ -76,7 +76,7 @@ export class DefaultOrmService {
   async query02() {
     const queryRunner = this.connection.createQueryRunner();
     this.logger.log(
-      <First[]>(
+      <FirstEntity[]>(
         await queryRunner.manager.query(
           `SELECT ? AS P0, ? AS P1, ? AS P2, ? AS P3`,
           ['A', 'B', 'C', 'D'],
@@ -84,7 +84,7 @@ export class DefaultOrmService {
       ),
     );
     this.logger.log(
-      <First[]>(
+      <FirstEntity[]>(
         await queryRunner.manager.query(
           `SELECT :p0 AS P0, :p1 AS P1, :p0 AS P2, :p1 AS P4`,
           ['1%', '%3'],
@@ -92,7 +92,7 @@ export class DefaultOrmService {
       ),
     );
     this.logger.log(
-      <First[]>(
+      <FirstEntity[]>(
         await queryRunner.manager.query(
           `SELECT $0 AS P0, $1 AS P1, $0 AS P2, $1 AS P4`,
           ['1%', '%3'],
@@ -115,10 +115,10 @@ export class DefaultOrmService {
       //   TEXT: 'transaction01-2'',
       // });
       // save
-      await queryRunner.manager.save(First, {
+      await queryRunner.manager.save(FirstEntity, {
         TEXT: 'transaction01-1',
       });
-      await queryRunner.manager.save(First, {
+      await queryRunner.manager.save(FirstEntity, {
         TEXT: 'transaction01-2',
       });
       // queryRunner.query(`delete from FIRST`);

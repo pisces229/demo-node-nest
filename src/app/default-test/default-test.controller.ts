@@ -22,7 +22,7 @@ import { DefaultRoleDecorator } from 'src/core/decorator/default-role.decorator'
 import { DefaultCasbinGuard } from 'src/core/guard/default-casbin.guard';
 import { DefaultGuard } from 'src/core/guard/default.guard';
 import { DefaultInterceptor } from 'src/core/interceptor/default.interceptor';
-import { WinstonDefaultLogger } from 'src/core/logger/winston-default.logger';
+import { DefaultLogger } from 'src/core/logger/default.logger';
 import { DefaultTestService } from './default-test.service';
 
 @Controller({ path: 'default-test', scope: Scope.REQUEST })
@@ -35,11 +35,11 @@ export class DefaultTestController {
     @Inject(REQUEST) private readonly request: Request,
     private readonly moduleRef: ModuleRef,
     private readonly httpService: HttpService,
-    private readonly winstonDefaultLogger: WinstonDefaultLogger,
+    private readonly defaultLogger: DefaultLogger,
     private readonly defaultTestService: DefaultTestService,
   ) {
     this.logger.log('DefaultTestController');
-    this.winstonDefaultLogger.info('DefaultTestController');
+    this.defaultLogger.info('DefaultTestController');
   }
   @Get('case01')
   // @Get('case*1')
