@@ -6,12 +6,14 @@ export class DatabaseLogger implements TypeOrmLogger {
   constructor() {
     this.logger = createLogger({
       format: format.json(),
+      // defaultMeta: { service: 'system' },
       transports: [
         new transports.File({
           filename: `d:/workspace/demo-node-nest/database.log`,
           maxsize: 102400,
           maxFiles: 10,
         }),
+        new transports.Console(),
       ],
     });
   }

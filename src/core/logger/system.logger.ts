@@ -19,7 +19,7 @@ export class SystemLogger extends ConsoleLogger {
       //   format.splat(),
       //   format.json()
       // ),
-      // defaultMeta: { service: 'default' },
+      // defaultMeta: { service: 'system' },
       transports: [
         // new transports.File({ filename: 'quick-start-error.log', level: 'error' }),
         new transports.File({

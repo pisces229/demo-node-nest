@@ -14,12 +14,14 @@ export class DefaultLogger {
       .replace(new RegExp('/', 'g'), '.');
     this.logger = createLogger({
       format: format.json(),
+      // defaultMeta: { service: 'system' },
       transports: [
         new transports.File({
           filename: `d:/workspace/demo-node-nest/${filename}.log`,
           maxsize: 102400,
           maxFiles: 10,
         }),
+        new transports.Console(),
       ],
     });
   }
