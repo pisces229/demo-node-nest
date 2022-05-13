@@ -23,13 +23,13 @@ async function bootstrap() {
   // });
   const app = await NestFactory.create(MainModule, {
     bufferLogs: true,
-    // httpsOptions: {
-    //   // pfx: '',
-    //   key: Fs.readFileSync('d:/openssl/server/server.key'),
-    //   passphrase: '123456',
-    //   cert: Fs.readFileSync('d:/openssl/server/server.crt'),
-    //   // ca: '',
-    // },
+    httpsOptions: {
+      // ca: '',
+      // pfx: '',
+      // passphrase: '123456',
+      key: Fs.readFileSync('d:/mkcert/localhost+2-key.pem'),
+      cert: Fs.readFileSync('d:/mkcert/localhost+2.pem'),
+    },
   });
   app.useLogger(app.get(SystemLogger));
   // app.enableCors();
@@ -50,7 +50,7 @@ async function bootstrap() {
   await app.listen(process.env.SERVER_PORT);
   // app.enableShutdownHooks();
   // await app.close();
-  console.log(`http://localhost:${process.env.SERVER_PORT}`);
+  console.log(`https://localhost:${process.env.SERVER_PORT}`);
 }
 function setupSwagger(app: INestApplication) {
   const builder = new DocumentBuilder();
