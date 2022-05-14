@@ -45,9 +45,9 @@ export class DefaultOrmController {
   }
   @Get('query')
   async query() {
-    // await this.defaultOrmService.query01();
+    await this.defaultOrmService.query01();
     // await this.defaultOrmService.query02();
-    await this.defaultOrmService.query03();
+    // await this.defaultOrmService.query03();
     return of({ Success: true });
   }
 }

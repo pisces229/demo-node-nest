@@ -7,6 +7,7 @@ import { Connection, Repository } from 'typeorm';
 @Injectable()
 export class DefaultOrmService {
   private readonly logger = new Logger(DefaultOrmService.name);
+  // private readonly firstEntityRepository: Repository<FirstEntity>;
   constructor(
     @InjectConnection(DatabaseName.DefaultConnection)
     private readonly connection: Connection,
@@ -15,6 +16,7 @@ export class DefaultOrmService {
   ) {
     this.logger.log('DefaultOrmService');
     this.logger.log(connection.name);
+    // this.firstEntityRepository = connection.getRepository(FirstEntity);
   }
   async create() {
     const data = await this.firstEntityRepository.create({
@@ -128,6 +130,16 @@ export class DefaultOrmService {
     } finally {
       await queryRunner.release();
     }
+  }
+  async transaction02() {
+    await this.connection.transaction(async (manager) => {
+      await manager.save(FirstEntity, {
+        TEXT: 'transaction01-1',
+      });
+      await manager.save(FirstEntity, {
+        TEXT: 'transaction01-2',
+      });
+    });
   }
   async query03() {
     this.logger.log(await this.connection.query(`delete from FIRST`));
