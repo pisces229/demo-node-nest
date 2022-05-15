@@ -18,6 +18,7 @@ export class DefaultSwaggerController {
   private readonly logger = new Logger(DefaultSwaggerController.name);
   @Post('case01')
   async case01(@Body() model: DefaultSwagger01InputModel) {
+    this.logger.log(model);
     return of({});
   }
   @ApiBody({ type: [DefaultSwagger02InputModel] })
