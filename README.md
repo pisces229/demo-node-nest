@@ -56,10 +56,6 @@ Git 的 core.autocrlf 參數
 
 ## Package
 
-Environment Package
-
-`npm install cross-env --save-dev`
-
 File Package
 
 `npm install @types/multer --save-dev`

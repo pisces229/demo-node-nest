@@ -31,7 +31,7 @@ import { DatabaseName } from './database.name';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'sqlite',
-        database: configService.get<string>('DATABASE_DEFAULT_DATABASE'),
+        database: configService.get<string>('APP_DATABASE_DEFAULT_DATABASE'),
         autoLoadEntities: true,
         logger: new DatabaseLogger(),
       }),

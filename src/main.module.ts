@@ -35,7 +35,7 @@ import { SystemLogger } from './core/logger/system.logger';
     CoreModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `environment/${process.env.NODE_ENV}.env`,
+      envFilePath: `env/${process.env.NODE_ENV}.env`,
       load: [DefaultConfigFactory],
       // envFilePath: ['development.local.env', 'development.env'],
       // expandVariables: true,

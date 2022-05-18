@@ -15,7 +15,7 @@ async function bootstrap() {
   console.log(`__filename:${__filename}`);
   console.log(`NODE_ENV:[${process.env.NODE_ENV}]`);
   console.log(
-    `DATABASE_DEFAULT_DATABASE:${process.env.DATABASE_DEFAULT_DATABASE}`,
+    `DATABASE_DEFAULT_DATABASE:${process.env.APP_DATABASE_DEFAULT_DATABASE}`,
   );
   // const app = await NestFactory.create(AppModule, {
   //   // logger: ['error', 'warn', 'log', 'verbose', 'debug'],
@@ -41,16 +41,18 @@ async function bootstrap() {
   // app.useGlobalGuards(new Guard());
   const configService = app.get(ConfigService);
   console.log(`ENVIRONMENT:
-    [${configService.get<string>('server.environment')}]
-    [${process.env.SERVER_ENVIRONMENT}]`);
+    [${configService.get<string>('default.server.environment')}]
+    [${configService.get<string>('APP_SERVER_ENVIRONMENT')}]
+    [${process.env.APP_SERVER_ENVIRONMENT}]`);
   console.log(`PORT:
-    [${configService.get<string>('server.port')}]
-    [${process.env.SERVER_PORT}]`);
+    [${configService.get<string>('default.server.port')}]
+    [${configService.get<string>('APP_SERVER_PORT')}]
+    [${process.env.APP_SERVER_PORT}]`);
   setupSwagger(app);
-  await app.listen(process.env.SERVER_PORT);
+  await app.listen(process.env.APP_SERVER_PORT);
   // app.enableShutdownHooks();
   // await app.close();
-  console.log(`https://localhost:${process.env.SERVER_PORT}`);
+  console.log(`https://localhost:${process.env.APP_SERVER_PORT}`);
 }
 function setupSwagger(app: INestApplication) {
   const builder = new DocumentBuilder();

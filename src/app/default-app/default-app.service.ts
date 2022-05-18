@@ -10,14 +10,13 @@ export class DefaultAppService {
     private readonly configService: ConfigService,
     private readonly defaultAppRepository: DefaultAppRepository,
   ) {
-    //console.log('DefaultAppService');
-    this.defaultLogger.debug(
+    this.defaultLogger.info(
       `${new Date().toISOString()} SERVER_PORT':
-      ${this.configService.get<number>('server.port')}`,
+      ${this.configService.get<number>('default.server.port')}`,
     );
-    this.defaultLogger.debug(
+    this.defaultLogger.info(
       `${new Date().toISOString()} SERVER_ENVIRONMENT:
-      ${this.configService.get<string>('server.environment')}`,
+      ${this.configService.get<string>('default.server.environment')}`,
     );
   }
   async run() {
