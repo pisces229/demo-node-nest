@@ -9,7 +9,7 @@ export class DatabaseLogger implements TypeOrmLogger {
       // defaultMeta: { service: 'system' },
       transports: [
         new transports.File({
-          filename: `d:/workspace/demo-node-nest/database.log`,
+          filename: `${process.env.APP_LOG_DEST}/database.log`,
           maxsize: 102400,
           maxFiles: 10,
         }),

@@ -19,7 +19,7 @@ import { DefaultExceptionFilter } from './core/filter/default-exception.filter';
 import { DefaultGuard } from './core/guard/default.guard';
 import { DefaultInterceptor } from './core/interceptor/default.interceptor';
 import { DefaultPipe } from './core/pipe/default.pipe';
-import DefaultConfigFactory from './config/default.config';
+import DefaultConfig from './config';
 import { DatabaseModule } from './common/database/database.module';
 import { CoreModule } from './core/core.module';
 import { DefaultAppModule } from './app/default-app/default-app.module';
@@ -35,9 +35,8 @@ import { SystemLogger } from './core/logger/system.logger';
     CoreModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `env/${process.env.NODE_ENV}.env`,
-      load: [DefaultConfigFactory],
-      // envFilePath: ['development.local.env', 'development.env'],
+      envFilePath: [`env/${process.env.NODE_ENV}.env`],
+      load: [DefaultConfig],
       // expandVariables: true,
     }),
     DefaultDynamicModule.register(),

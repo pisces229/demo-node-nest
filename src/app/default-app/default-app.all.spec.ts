@@ -1,9 +1,9 @@
-import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { DefaultLogger } from 'src/core/logger/default.logger';
 import { DefaultAppRepository } from './default-app.repository';
 import { DefaultAppService } from './default-app.service';
 import { Scope } from '@nestjs/common';
+import { DefaultConfigService } from 'src/core/service/default-config.service';
 
 describe('DefaultAppAllTest', () => {
   let service: DefaultAppService;
@@ -15,24 +15,15 @@ describe('DefaultAppAllTest', () => {
           scope: Scope.DEFAULT,
           provide: DefaultLogger,
           useValue: {
-            debug: (message: string) => console.log(message),
-            info: (message: string) => console.log(message),
+            debug: jest.fn((message: string) => console.log(message)),
+            info: jest.fn((message: string) => console.log(message)),
           },
         },
         {
           scope: Scope.DEFAULT,
-          provide: ConfigService,
+          provide: DefaultConfigService,
           useValue: {
-            get: jest.fn((key: string) => {
-              switch (key) {
-                case 'server.environment': {
-                  return 'TEST';
-                }
-                case 'server.port': {
-                  return 9999;
-                }
-              }
-            }),
+            environment: jest.fn(() => 'Jest Test'),
           },
         },
         // app
@@ -63,7 +54,7 @@ describe('DefaultAppAllTest', () => {
     jest.spyOn(service, 'run');
     expect(await service.run()).toBe('DefaultAppService.Mock.run');
     expect(await repository.run()).toBe('Mock.run');
-    await service.run();
+    console.log(await service.run());
     expect(service.run).toHaveBeenCalledTimes(2);
   });
 });

@@ -17,7 +17,7 @@ export class DefaultLogger {
       // defaultMeta: { service: 'system' },
       transports: [
         new transports.File({
-          filename: `d:/workspace/demo-node-nest/${filename}.log`,
+          filename: `${process.env.APP_LOG_DEST}/${filename}.log`,
           maxsize: 102400,
           maxFiles: 10,
         }),

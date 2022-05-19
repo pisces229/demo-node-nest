@@ -49,6 +49,7 @@ export class DefaultPostController {
   @Post('case04')
   @UseInterceptors(FileInterceptor('file'))
   async case04(@UploadedFile() file: Express.Multer.File) {
+    this.logger.log(file.path);
     this.logger.log(file.fieldname);
     this.logger.log(file.originalname);
     return of({ content: `case04` });

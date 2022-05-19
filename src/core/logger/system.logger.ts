@@ -23,7 +23,7 @@ export class SystemLogger extends ConsoleLogger {
       transports: [
         // new transports.File({ filename: 'quick-start-error.log', level: 'error' }),
         new transports.File({
-          filename: 'd:/workspace/demo-node-nest/system.log',
+          filename: `${process.env.APP_LOG_DEST}/system.log`,
           maxsize: 102400,
           maxFiles: 10,
         }),

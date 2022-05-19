@@ -6,21 +6,19 @@ import { MulterModule } from '@nestjs/platform-express';
 import { newEnforcer } from 'casbin';
 import { DefaultLogger } from './logger/default.logger';
 import { DefaultCasbinService } from './service/default-casbin.service';
+import { DefaultConfigService } from './service/default-config.service';
 
 @Global()
 @Module({
   imports: [
     JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        // const secret = config.get<string>('secrets.jwt');
-        const secret = 'qwertyuiop';
+      // imports: [ConfigModule],
+      inject: [DefaultConfigService],
+      useFactory: (defaultConfigService: DefaultConfigService) => {
         return {
-          secret,
+          secret: defaultConfigService.jwtSecret(),
           signOptions: {
-            expiresIn: '60s',
-            // expiresIn: '0s',
+            expiresIn: defaultConfigService.jwtExpiresIn(),
           },
         };
       },
@@ -47,9 +45,17 @@ import { DefaultCasbinService } from './service/default-casbin.service';
     //   }),
     //   inject: [ConfigService],
     // }),
-    MulterModule.register({
-      //dest: './upload',
-      dest: 'd:/workSpace/demo-node-nest/upload',
+    // MulterModule.register({
+    //   //dest: './upload',
+    //   dest: process.env.APP_DEST_UPLOAD,
+    // }),
+    MulterModule.registerAsync({
+      inject: [DefaultConfigService],
+      useFactory: async (defaultConfigService: DefaultConfigService) => {
+        return {
+          dest: defaultConfigService.destUpload(),
+        };
+      },
     }),
     // MulterModule.register({
     //   storage: diskStorage({
@@ -74,10 +80,16 @@ import { DefaultCasbinService } from './service/default-casbin.service';
   providers: [
     {
       provide: 'DEFAULT_CASBIN_ENFORCER',
-      useFactory: async () =>
-        await newEnforcer('casbin/model.conf', 'casbin/policy.csv'),
+      inject: [DefaultConfigService],
+      useFactory: async (defaultConfigService: DefaultConfigService) => {
+        return await newEnforcer(
+          defaultConfigService.casbinModel(),
+          defaultConfigService.casbinPolicy(),
+        );
+      },
     },
     DefaultCasbinService,
+    DefaultConfigService,
     DefaultLogger,
   ],
   exports: [
@@ -85,6 +97,7 @@ import { DefaultCasbinService } from './service/default-casbin.service';
     HttpModule,
     MulterModule,
     DefaultCasbinService,
+    DefaultConfigService,
     DefaultLogger,
   ],
 })

@@ -94,9 +94,9 @@ Jest-Cli Package
 
 Production Command
 
-`set NODE_ENV=production`
+`npm install production`
 
-`set NODE_PORT=9000`
+`set NODE_ENV=production`
 
 `node dist/main`
 
@@ -111,7 +111,17 @@ IISNODE(Web.Config)
 </configuration>
 ```
 
-## Self-certification
+## [Node Version Manager](https://github.com/coreybutler/nvm-windows)
+
+Node 版本管理控制
+
+* 切換 Node.js 的版本
+
+* 使用特定 Node.js 作為預設啟用環境
+
+* 安裝不同的套件至特定的版本上
+
+## Self Certification
 
 [Install Chocolatey with PowerShell](https://docs.chocolatey.org/en-us/choco/setup)
 

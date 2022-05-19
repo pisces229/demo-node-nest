@@ -61,7 +61,9 @@ export class DefaultTestController {
     // throw new BadRequestException('Error');
     // throw new BadRequestException({ msg: 'Error' });
     this.defaultTestService.encrypt();
-    this.defaultTestService.jwt();
+    this.logger.log('jwt start');
+    await this.defaultTestService.jwt();
+    this.logger.log('jwt end');
     return of({
       content: `case01`,
       ...(await firstValueFrom(this.defaultTestService.get())),

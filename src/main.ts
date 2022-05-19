@@ -1,5 +1,4 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import * as Fs from 'fs';
 import { MainModule } from './main.module';
@@ -9,14 +8,15 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { SystemLogger } from './core/logger/system.logger';
+import { DefaultConfigService } from './core/service/default-config.service';
 
 async function bootstrap() {
-  console.log(`__dirname:${__dirname}`);
-  console.log(`__filename:${__filename}`);
-  console.log(`NODE_ENV:[${process.env.NODE_ENV}]`);
-  console.log(
-    `DATABASE_DEFAULT_DATABASE:${process.env.APP_DATABASE_DEFAULT_DATABASE}`,
-  );
+  console.log(`__dirname:[${__dirname}]`);
+  console.log(`__filename:[${__filename}]`);
+  Object.entries(process.env)
+    .map(([key, value]) => ({ key, value }))
+    .filter((f) => f.key.startsWith('APP_'))
+    .forEach((f) => console.log(`[${f.key}]:[${f.value}]`));
   // const app = await NestFactory.create(AppModule, {
   //   // logger: ['error', 'warn', 'log', 'verbose', 'debug'],
   //   logger: ['error', 'warn'],
@@ -27,8 +27,8 @@ async function bootstrap() {
       // ca: '',
       // pfx: '',
       // passphrase: '123456',
-      key: Fs.readFileSync('d:/mkcert/localhost+2-key.pem'),
-      cert: Fs.readFileSync('d:/mkcert/localhost+2.pem'),
+      key: Fs.readFileSync(process.env.APP_HTTPS_KEY),
+      cert: Fs.readFileSync(process.env.APP_HTTPS_CERT),
     },
   });
   app.useLogger(app.get(SystemLogger));
@@ -39,20 +39,12 @@ async function bootstrap() {
   // app.use(Middleware);
   // app.useGlobalInterceptors(new Interceptor());
   // app.useGlobalGuards(new Guard());
-  const configService = app.get(ConfigService);
-  console.log(`ENVIRONMENT:
-    [${configService.get<string>('default.server.environment')}]
-    [${configService.get<string>('APP_SERVER_ENVIRONMENT')}]
-    [${process.env.APP_SERVER_ENVIRONMENT}]`);
-  console.log(`PORT:
-    [${configService.get<string>('default.server.port')}]
-    [${configService.get<string>('APP_SERVER_PORT')}]
-    [${process.env.APP_SERVER_PORT}]`);
+  const defaultConfigService = app.get(DefaultConfigService);
   setupSwagger(app);
-  await app.listen(process.env.APP_SERVER_PORT);
+  await app.listen(defaultConfigService.port());
   // app.enableShutdownHooks();
   // await app.close();
-  console.log(`https://localhost:${process.env.APP_SERVER_PORT}`);
+  console.log(`https://localhost:${defaultConfigService.port()}`);
 }
 function setupSwagger(app: INestApplication) {
   const builder = new DocumentBuilder();

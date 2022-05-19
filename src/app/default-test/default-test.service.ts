@@ -18,14 +18,14 @@ export class DefaultTestService {
     const hash = pbkdf2Sync(value, salt, 1000, 64, 'sha256').toString('hex');
     this.logger.log(`encrypt:${hash}`);
   }
-  jwt(): void {
+  async jwt() {
     const payload = { id: '1234567890', username: 'Pete' };
-    const jwtEncode = this.jwtService.sign(payload);
+    const jwtEncode = await this.jwtService.signAsync(payload);
     this.logger.log(`jwtEncode:${jwtEncode}`);
     const jwtDecode = this.jwtService.decode(jwtEncode);
     this.logger.log(`jwtDecode:${JSON.stringify(jwtDecode)}`);
     try {
-      const jwtVerify = this.jwtService.verify(jwtEncode, {
+      const jwtVerify = await this.jwtService.verifyAsync(jwtEncode, {
         // ignoreExpiration: true,
       });
       this.logger.log(`jwtVerify:${JSON.stringify(jwtVerify)}`);

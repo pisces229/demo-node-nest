@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseLogger } from 'src/core/logger/database.logger';
+import { DefaultConfigService } from 'src/core/service/default-config.service';
 import { DatabaseName } from './database.name';
 
 @Module({
@@ -28,10 +28,10 @@ import { DatabaseName } from './database.name';
     // }),
     TypeOrmModule.forRootAsync({
       name: DatabaseName.DefaultConnection,
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
+      inject: [DefaultConfigService],
+      useFactory: async (defaultConfigService: DefaultConfigService) => ({
         type: 'sqlite',
-        database: configService.get<string>('APP_DATABASE_DEFAULT_DATABASE'),
+        database: defaultConfigService.database(),
         autoLoadEntities: true,
         logger: new DatabaseLogger(),
       }),
