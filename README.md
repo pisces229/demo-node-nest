@@ -134,3 +134,7 @@ Node 版本管理控制
 `mkcert -help`
 
 `mkcert localhost 127.0.0.1 ::1`
+
+## Gif Config
+
+`git config --global core.autocrlf false`
