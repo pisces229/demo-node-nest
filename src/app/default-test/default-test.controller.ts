@@ -5,7 +5,6 @@ import {
   Header,
   HttpCode,
   HttpStatus,
-  Inject,
   Logger,
   Req,
   Res,
@@ -13,7 +12,8 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ContextIdFactory, ModuleRef, REQUEST } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
+import { pbkdf2Sync, randomBytes } from 'crypto';
 import { Request, Response } from 'express';
 import { Agent } from 'https';
 import { firstValueFrom, of } from 'rxjs';
@@ -23,7 +23,6 @@ import { DefaultCasbinGuard } from 'src/core/guard/default-casbin.guard';
 import { DefaultGuard } from 'src/core/guard/default.guard';
 import { DefaultInterceptor } from 'src/core/interceptor/default.interceptor';
 import { DefaultLogger } from 'src/core/logger/default.logger';
-import { DefaultTestService } from './default-test.service';
 
 @Controller({ path: 'default-test', scope: Scope.REQUEST })
 @UseGuards(DefaultCasbinGuard)
@@ -32,11 +31,9 @@ import { DefaultTestService } from './default-test.service';
 export class DefaultTestController {
   private readonly logger = new Logger(DefaultTestController.name);
   constructor(
-    @Inject(REQUEST) private readonly request: Request,
-    private readonly moduleRef: ModuleRef,
     private readonly httpService: HttpService,
     private readonly defaultLogger: DefaultLogger,
-    private readonly defaultTestService: DefaultTestService,
+    private readonly jwtService: JwtService,
   ) {
     this.logger.log('DefaultTestController');
     this.defaultLogger.info('DefaultTestController');
@@ -60,13 +57,33 @@ export class DefaultTestController {
     // );
     // throw new BadRequestException('Error');
     // throw new BadRequestException({ msg: 'Error' });
-    this.defaultTestService.encrypt();
+
+    this.logger.log('encrypt start');
+    const value = '1qaz@WSX';
+    const salt = randomBytes(16).toString('hex');
+    const hash = pbkdf2Sync(value, salt, 1000, 64, 'sha256').toString('hex');
+    this.logger.log(`encrypt:${hash}`);
+    this.logger.log('encrypt end');
+
     this.logger.log('jwt start');
-    await this.defaultTestService.jwt();
+    const payload = { id: '1234567890', username: 'Pete' };
+    const jwtEncode = await this.jwtService.signAsync(payload);
+    this.logger.log(`jwtEncode:${jwtEncode}`);
+    const jwtDecode = this.jwtService.decode(jwtEncode);
+    this.logger.log(`jwtDecode:${JSON.stringify(jwtDecode)}`);
+    try {
+      const jwtVerify = await this.jwtService.verifyAsync(jwtEncode, {
+        // ignoreExpiration: true,
+      });
+      this.logger.log(`jwtVerify:${JSON.stringify(jwtVerify)}`);
+    } catch (e) {
+      this.logger.log(e);
+    }
     this.logger.log('jwt end');
+
     return of({
       content: `case01`,
-      ...(await firstValueFrom(this.defaultTestService.get())),
+      ...{ service: 'Service', method: 'Method' },
     });
   }
   @Get('case02')
@@ -92,25 +109,6 @@ export class DefaultTestController {
   }
   @Get('case06')
   async case06() {
-    // this.moduleRef.get(DefaultTestService);
-    // this.moduleRef.get(DefaultTestService, { strict: false });
-    // this.moduleRef.resolve(DefaultTestService);
-    // this.moduleRef.create(DefaultTestService);
-    // this.logger.log(`ContextIdFactory.create():[${ContextIdFactory.create().id}]`);
-    // const identifier = ContextIdFactory.create();
-    // this.moduleRef.registerRequestByContextId(this.request, identifier);
-    const identifier = ContextIdFactory.getByRequest(this.request);
-    const [instance1, instance2] = await Promise.all([
-      this.moduleRef.resolve(DefaultTestService, identifier),
-      this.moduleRef.resolve(DefaultTestService, identifier),
-    ]);
-    this.logger.log(this.defaultTestService === instance1);
-    this.logger.log(this.defaultTestService === instance2);
-    this.logger.log(instance1 === instance2);
-    return of({ content: `case06` });
-  }
-  @Get('case07')
-  async case07() {
     const httpsAgent = new Agent({ rejectUnauthorized: false });
     const response = await firstValueFrom(
       this.httpService.get(

@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { DefaultCasbinService } from 'src/core/service/default-casbin.service';
+import { DefaultCasbinService } from 'src/core/guard/default-casbin.service';
 import { Request } from 'express';
 
 @Injectable()

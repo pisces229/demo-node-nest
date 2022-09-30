@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { MulterModule } from '@nestjs/platform-express';
 import { newEnforcer } from 'casbin';
 import { DefaultLogger } from './logger/default.logger';
-import { DefaultCasbinService } from './service/default-casbin.service';
+import { DefaultCasbinService } from './guard/default-casbin.service';
 import { DefaultConfigService } from './service/default-config.service';
 
 @Global()
